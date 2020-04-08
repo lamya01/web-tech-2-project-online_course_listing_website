@@ -6,8 +6,10 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const axios = require('axios');
 const cors = require('cors');
-
 const app = express();
+var fs = require('fs');
+
+
 
 // Passport Config
 require('./config/passport')(passport);
@@ -60,9 +62,32 @@ app.use(function(req, res, next) {
   next();
 });
 
+
+var parseString = require('xml2js').parseString;
+
+
+var parsedxml = ""
+
+fs.readFile( './public/feed.xml', function(err, data) {
+  var xml = data
+
+  parseString(xml, function (err, result) {
+    // console.log(JSON.stringify(result))
+    parsedxml = JSON.stringify(result)
+  });
+  
+  app.set('parsedxml', parsedxml);
+
+});
+
+
+
+
 // Routes
 app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/users.js'));
+
+
 
 const PORT = process.env.PORT || 5000;
 
