@@ -80,24 +80,101 @@ router.get('/home/getwishlist', jsonParser, (req, res) => {
   console.log("info of wishlist courses")
 
   wishlistcourses = []
-  for (var i = 0; i < wishlist[0].length; i++) {
-    // console.log(wishlist[0][1])
-    Course.find({"name": decodeURIComponent(wishlist[0][i])}, function(err, result) {
-      wishlistcourses.push(result)
-      // console.log(result)
-      console.log("course found")
-    });
+  var tasksToGo = wishlist[0].length
 
-    console.log("iteration no", i)
-    
+  var onComplete = function() {
+    res.send({"courses": wishlistcourses})
+    console.log("response sent")
+    console.log("DONE")
+  };
+
+  if (tasksToGo === 0) {
+    onComplete();
+  } 
+  else {
+    for (var i = 0; i < wishlist[0].length; i++) {
+      // console.log(wishlist[0][1])
+      Course.find({"name": decodeURIComponent(wishlist[0][i])}, function(err, result) {
+        wishlistcourses.push(result[0])
+        // console.log(result)
+        console.log("course found", result[0])
+        if (--tasksToGo === 0) {
+          // No tasks left, good to go
+          onComplete();
+        }
+      });
+
+      
+    }
+
   }
 
-  console.log("DONE")
-
-  //fix this. thisshodl go only after everything is done
-  res.send({"courses": wishlistcourses})
-  console.log("response sent")
   
+
+})
+
+
+router.get('/home/getrecs', jsonParser, (req, res) => {
+  //implement recomendation system
+
+  var recs = []
+
+  coursenmae = req.query.data
+  console.log("recommend courses base on ", coursename)
+
+
+  for(var i = 1; i<wishlist.length; ++i){
+    // console.log(wishlist[i])
+    if(wishlist[i].includes(coursename)){
+      // console.log(wishlist[i])
+      for(var j = 0; j<wishlist[i].length; ++j){
+        if(recs.includes(wishlist[i][j]) || wishlist[i][j]==coursename){
+          //do nothing
+        }
+        else{
+          recs.push(wishlist[i][j])
+          console.log('wishlist item:', wishlist[i][j])
+        }
+      }
+    }
+  }
+
+  console.log("recs:", recs)
+
+  // get course details and send that 
+  console.log("info of wishlist courses")
+
+  recdetails = []
+  var tasksToGo = recs.length
+
+  var onComplete = function() {
+    res.send({"recs": recdetails})
+    console.log("response sent")
+    console.log("DONE")
+  };
+
+  if (tasksToGo === 0) {
+    onComplete();
+  } 
+  else {
+    for (var i = 0; i < recs.length; i++) {
+
+      Course.find({"name": decodeURIComponent(recs[i])}, function(err, result) {
+        recdetails.push(result[0])
+        // console.log(result)
+        console.log("course found", result[0])
+        if (--tasksToGo === 0) {
+          // No tasks left, good to go
+          onComplete();
+        }
+      });
+
+      
+    }
+
+  }
+
+
 
 })
 

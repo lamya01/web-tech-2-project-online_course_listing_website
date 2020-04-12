@@ -6,5 +6,4 @@ function loadrss(){
 
     document.getElementById("iframebutton").style = "display: none"
 
-    console.log("BROOOOO")
 }
