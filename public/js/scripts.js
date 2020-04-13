@@ -15,8 +15,8 @@ $(document).ready(() => {
             var website = allcourses[i].website
             var id = allcourses[i].id
                 
-            document.getElementById("allcourses").innerHTML +=
-                "<div class=\"card\" style=\"width: 20rem; overflow: hidden; text-overflow: ellipsis;\">"
+            $("#allcourses").innerHTML +=
+                "<div class=\"card\" style=\"width: 20rem;\">"
                 + "<div class=\"card-body\">"
                 + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
                 + "<p class=\"card-text break-word\">Topic: " + topic + "<br>Price:" + price + "<br>Website: " + website + "<br></p>"
@@ -26,7 +26,7 @@ $(document).ready(() => {
                 + "</div>"
 
 
-            const element = document.querySelectorAll("#addButton")
+            const element = $("#addButton")
             element.forEach(function(el){
                 el.addEventListener('click', addToWishList);
             });
@@ -67,7 +67,7 @@ $(document).ready(() => {
             var reclist = res.data.recs
             console.log(reclist)
 
-            document.getElementById("wishlistrec").innerHTML = ''
+            $("#wishlistrec").innerHTML = ''
 
             for(var i = 0; i < reclist.length; i++){
                 var source = "https://www." + reclist[i].website + ".com"
@@ -77,7 +77,7 @@ $(document).ready(() => {
                 var website = reclist[i].website
                 var id = reclist[i].id
                     
-                document.getElementById("wishlistrec").innerHTML +=
+               $("#wishlistrec").innerHTML +=
                     "<div class=\"card\" style=\"width: 20rem;\">"
                     + "<div class=\"card-body\">"
                     + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
@@ -88,7 +88,7 @@ $(document).ready(() => {
                     + "</div>"
     
     
-                const element = document.querySelectorAll("#addButton")
+                const element = $("#addButton")
                 element.forEach(function(el){
                     el.addEventListener('click', addToWishList);
                 });
@@ -104,7 +104,7 @@ $(document).ready(() => {
 
     function displayWishlist(){
 
-        document.getElementById("wishlist").innerHTML = ''
+        $("#wishlist").innerHTML = ''
 
         axios.get('http://localhost:5000/home/getwishlist')
         .then(res => {
@@ -119,7 +119,7 @@ $(document).ready(() => {
                     var website = allcourses[i].website
                     var id = allcourses[i].id
                         
-                    document.getElementById("wishlist").innerHTML +=
+                    ("#wishlist").innerHTML +=
                         "<div class=\"card\" style=\"width: 20rem;\">"
                         + "<div class=\"card-body\">"
                         + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
