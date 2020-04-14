@@ -13,7 +13,11 @@ const jsonParser = bodyParser.json();
 var wishlist = []
 wishlist.push(["Intro%20to%20ML", "Tensor%20flow", "Open%20CV"])
 wishlist.push(["learn%20excel%20expert", "Intro%20to%20ML", "data%20structures%20and%20algo"])
-wishlist.push(["learn%20oil%20painting"])
+wishlist.push(["learn%20oil%20painting", "ui/ux%20complete%20guide"])
+wishlist.push(["illustrator%20and%20photoshop", "ui/ux%20complete%20guide"])
+wishlist.push(["game%20design", "2d%20game%20dev%20for%20android", "state%20space%20search"])
+wishlist.push(["2d%20game%20dev%20for%20android", "Intro%20to%20ML", "learn%20oil%20painting"])
+wishlist.push(["networking%20and%20systems%20intermediate", "Neural%20Nets%20Basics"])
 
 
 
@@ -173,6 +177,58 @@ router.get('/home/getrecs', jsonParser, (req, res) => {
     }
 
   }
+
+
+
+})
+
+
+
+router.get('/home/analytics', (req, res) => {
+  
+  var newarr = [];
+  var courselist = []
+  var finalarr = [];
+
+  for(var i = 0; i < wishlist.length; i++){
+    newarr = newarr.concat(wishlist[i]);
+  }
+
+  for(var i = 0; i < newarr.length; i++){
+    if(courselist.includes(newarr[i])){
+      //do nothing
+    }
+    else{
+      courselist.push(newarr[i])
+    }
+  }
+
+  // for (var i = 0; i < courselist.length; i++) {
+
+  //   // add element to finalarr with count = 1
+  //   finalarr.push({'y': '1', 'label': courselist[i]})
+
+  // }
+
+
+  var counts = {};
+
+  for (var i = 0; i < newarr.length; i++) {
+    var num = newarr[i];
+    counts[num] = counts[num] ? counts[num] + 1 : 1;
+  }
+
+
+  for (var i = 0; i < courselist.length; i++) {
+
+    // add element to finalarr with count = 1
+    finalarr.push({'y': counts[courselist[i]], 'label': decodeURIComponent(courselist[i])})
+
+  }
+
+  console.log(finalarr)
+
+  res.send({"analdata": finalarr})
 
 
 

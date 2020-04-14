@@ -97,6 +97,8 @@ $(document).ready(() => {
             
             displayWishlist()
 
+            analytics()
+
         })
 
     }
@@ -138,6 +140,48 @@ $(document).ready(() => {
 
         })
         .catch(err => console.log(err))
+    }
+
+
+    function analytics(){
+        axios.get('http://localhost:5000/home/analytics')
+        .then(res => {
+            var analdata = res.data.analdata
+            console.log('analdata', analdata)
+
+
+            for(var i=0; i<analdata.len; ++i){
+                datapoints.push({"y": analdata[i]})
+            }
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                
+                title:{
+                    text:"Most Popular Courses on People's Wishlists"
+                },
+                axisX:{
+                    interval: 1
+                },
+                axisY2:{
+                    interlacedColor: "rgba(1,77,101,.2)",
+                    gridColor: "rgba(1,77,101,.1)",
+                    title: "Occurance"
+                },
+                data: [{
+                    type: "bar",
+                    name: "Course Names",
+                    axisYType: "secondary",
+                    color: "#014D65",
+                    dataPoints: analdata
+                }]
+            });
+            chart.render();
+            
+
+        })
+        .catch(err => console.log(err))
+
     }
 
 })
