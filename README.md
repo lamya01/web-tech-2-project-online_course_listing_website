@@ -1,6 +1,6 @@
-# Node.js & Passport Login
+# MongoDB, Node JS, Express, Passport JS
 
-This is a user login and registration app using Node.js, Express, Passport, Mongoose, EJS and some other packages.
+This is a course listing app using Node.js, Express, Passport, Mongoose, EJS and some other packages.
 
 ### Version: 2.0.0
 
