@@ -70,7 +70,6 @@ var parsedxml = ""
 
 fs.readFile( './public/feed.xml', function(err, data) {
   var xml = data
-
   parseString(xml, function (err, result) {
     // console.log(JSON.stringify(result))
     parsedxml = JSON.stringify(result)

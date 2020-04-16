@@ -11,15 +11,6 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json();
 
 var wishlist = []
-wishlist.push(["Intro%20to%20ML", "Tensor%20flow", "Open%20CV"])
-wishlist.push(["learn%20excel%20expert", "Intro%20to%20ML", "data%20structures%20and%20algo"])
-wishlist.push(["learn%20oil%20painting", "ui/ux%20complete%20guide"])
-wishlist.push(["illustrator%20and%20photoshop", "ui/ux%20complete%20guide"])
-wishlist.push(["game%20design", "2d%20game%20dev%20for%20android", "state%20space%20search"])
-wishlist.push(["2d%20game%20dev%20for%20android", "Intro%20to%20ML", "learn%20oil%20painting"])
-wishlist.push(["networking%20and%20systems%20intermediate", "Neural%20Nets%20Basics"])
-
-
 
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
@@ -56,7 +47,7 @@ router.get('/home/getcourses', (req, res) => {
 //try below two methods with name email field for user and name field for course
 
 router.post('/home/addtowishlist', jsonParser, (req, res) => {
-  
+
   email = req.user.email
   coursename = req.body.coursename
 
@@ -69,11 +60,11 @@ router.post('/home/addtowishlist', jsonParser, (req, res) => {
   console.log(wishlist)
 
 
-  //lets try to store in database
-  // User.update(
-  //   { "email": email },
-  //   { $push: { "wishlist" : courseid}}
-  // )
+  // lets try to store in database
+  User.update(
+    { "email": email },
+    { $push: { "wishlist" : courseid}}
+  )
 
 
 })
@@ -235,3 +226,44 @@ router.get('/home/analytics', (req, res) => {
 })
 
 module.exports = router;
+
+wishslist = []
+
+router.get("/home/allwishlists", (req, res) => {
+  User.find((err, userinfo) => {
+    // console.log('ALL USER INFO', userinfo)
+    // res.send({"courses": courses})
+  }).then(res => {
+    console.log("adfsadfasdf", res)
+
+    for(var i=0; i<res.length; ++i){
+      wishslist.push(res[i].wishslist)
+    }
+  
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+wishlist.push(["Tensor%20flow", "Open%20CV"])
+wishlist.push(["learn%20excel%20expert", "Intro%20to%20ML", "data%20structures%20and%20algo"])
+wishlist.push(["learn%20oil%20painting", "ui/ux%20complete%20guide"])
+wishlist.push(["illustrator%20and%20photoshop", "ui/ux%20complete%20guide"])
+wishlist.push(["game%20design", "2d%20game%20dev%20for%20android", "state%20space%20search"])
+wishlist.push(["2d%20game%20dev%20for%20android", "Intro%20to%20ML", "learn%20oil%20painting"])
+wishlist.push(["networking%20and%20systems%20intermediate", "Neural%20Nets%20Basics"])

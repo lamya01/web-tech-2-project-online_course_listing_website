@@ -1,5 +1,7 @@
 $(document).ready(() => {
 
+    axios.get("http://localhost:5000/home/allwishlists")
+
     console.log("front end script loaded")
 
     axios.get('http://localhost:5000/home/getcourses')
@@ -15,10 +17,10 @@ $(document).ready(() => {
             var website = allcourses[i].website
             var id = allcourses[i].id
                 
-            $("#allcourses").innerHTML +=
-                "<div class=\"card\" style=\"width: 20rem;\">"
+            document.getElementById("allcourses").innerHTML +=
+                "<div class=\"card\" style=\"width: 20rem; overflow: hidden; text-overflow: ellipsis;\">"
                 + "<div class=\"card-body\">"
-                + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses\"></img>"
+                + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses,study\"></img>"
                 + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
                 + "<p class=\"card-text break-word\">Topic: " + topic + "<br>Price:" + price + "<br>Website: " + website + "<br></p>"
                 + "<a href=" + source + ">View On Source Website</a><br>"
@@ -27,7 +29,7 @@ $(document).ready(() => {
                 + "</div>"
 
 
-            const element = $("#addButton")
+            const element = document.querySelectorAll("#addButton")
             element.forEach(function(el){
                 el.addEventListener('click', addToWishList);
             });
@@ -68,7 +70,7 @@ $(document).ready(() => {
             var reclist = res.data.recs
             console.log(reclist)
 
-            $("#wishlistrec").innerHTML = ''
+            document.getElementById("wishlistrec").innerHTML = ''
 
             for(var i = 0; i < reclist.length; i++){
                 var source = "https://www." + reclist[i].website + ".com"
@@ -78,10 +80,10 @@ $(document).ready(() => {
                 var website = reclist[i].website
                 var id = reclist[i].id
                     
-               $("#wishlistrec").innerHTML +=
+                document.getElementById("wishlistrec").innerHTML +=
                     "<div class=\"card\" style=\"width: 20rem;\">"
                     + "<div class=\"card-body\">"
-                    + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses\"></img>"
+                    + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses,study\"></img>"
                     + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
                     + "<p class=\"card-text break-word\">Topic: " + topic + "<br>Price:" + price + "<br>Website: " + website + "<br></p>"
                     + "<a href=" + source + ">View On Source Website</a><br>"
@@ -90,7 +92,7 @@ $(document).ready(() => {
                     + "</div>"
     
     
-                const element = $("#addButton")
+                const element = document.querySelectorAll("#addButton")
                 element.forEach(function(el){
                     el.addEventListener('click', addToWishList);
                 });
@@ -99,6 +101,8 @@ $(document).ready(() => {
             
             displayWishlist()
 
+            analytics()
+
         })
 
     }
@@ -106,7 +110,7 @@ $(document).ready(() => {
 
     function displayWishlist(){
 
-        $("#wishlist").innerHTML = ''
+        document.getElementById("wishlist").innerHTML = ''
 
         axios.get('http://localhost:5000/home/getwishlist')
         .then(res => {
@@ -121,10 +125,10 @@ $(document).ready(() => {
                     var website = allcourses[i].website
                     var id = allcourses[i].id
                         
-                    ("#wishlist").innerHTML +=
+                    document.getElementById("wishlist").innerHTML +=
                         "<div class=\"card\" style=\"width: 20rem;\">"
                         + "<div class=\"card-body\">"
-                        + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses\"></img>"
+                        + "<img class=\"card-img-top\" src=\"https://source.unsplash.com/1600x900/?tech,courses,study\"></img>"
                         + "<h5 class=\"card-title break-word\">"+ title +"</h5>"
                         + "<p class=\"card-text break-word\">Topic: " + topic + "<br>Price:" + price + "<br>Website: " + website + "<br></p>"
                         + "<a href=\"#\">redirect to website</a><br>"
@@ -141,6 +145,48 @@ $(document).ready(() => {
 
         })
         .catch(err => console.log(err))
+    }
+
+
+    function analytics(){
+        axios.get('http://localhost:5000/home/analytics')
+        .then(res => {
+            var analdata = res.data.analdata
+            console.log('analdata', analdata)
+
+
+            for(var i=0; i<analdata.len; ++i){
+                datapoints.push({"y": analdata[i]})
+            }
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                
+                title:{
+                    text:"Most Popular Courses on People's Wishlists"
+                },
+                axisX:{
+                    interval: 1
+                },
+                axisY2:{
+                    interlacedColor: "rgba(1,77,101,.2)",
+                    gridColor: "rgba(1,77,101,.1)",
+                    title: "Occurance"
+                },
+                data: [{
+                    type: "bar",
+                    name: "Course Names",
+                    axisYType: "secondary",
+                    color: "#014D65",
+                    dataPoints: analdata
+                }]
+            });
+            chart.render();
+            
+
+        })
+        .catch(err => console.log(err))
+
     }
 
 })
